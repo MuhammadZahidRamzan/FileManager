@@ -30,8 +30,8 @@ class DocumentAdapter(private val context: Context, private val documentList: Li
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         holder.title.text = documentList[position].title
-        holder.album.text = documentList[position].album
-        holder.size.text = convertBytesToMegabytes(documentList[position].size.toLong()).toString() + "MB"
+        holder.album.text = documentList[position].mimeType
+        holder.size.text = "convertBytesToMegabytes(documentList[position].size.toLong()).toString() "
         Glide.with(context).load(R.drawable.docs)
             .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
             .into(holder.image)

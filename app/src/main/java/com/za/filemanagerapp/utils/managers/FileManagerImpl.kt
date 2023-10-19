@@ -1,8 +1,8 @@
 package com.za.filemanagerapp.utils.managers
 
-import android.R.attr.mimeType
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.provider.MediaStore
 import com.za.filemanagerapp.features.audio.domain.model.Audio
@@ -97,55 +97,35 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
         return tempList
     }
 
-    @SuppressLint("Range")
     override fun getDocumentFiles(): List<Document> {
-        val tempList = ArrayList<Document>()
-        val selection = "${MediaStore.Files.FileColumns.MIME_TYPE}='application/pdf'"
-        val selectionArgs = arrayOf("application/pdf", "application/msword", "text/plain")
-        val projection1 = arrayOf(
-            MediaStore.Files.FileColumns.TITLE,
-         //   MediaStore.Files.FileColumns.SIZE,
-        //    MediaStore.Files.FileColumns._ID,
-        //    MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME,
-            MediaStore.Files.FileColumns.DATA,
-          //  MediaStore.Files.FileColumns.DATE_ADDED,
-         //   MediaStore.Files.FileColumns.BUCKET_ID
+        val pdfList = mutableListOf<Document>()
+
+        val uri = MediaStore.Files.getContentUri("external")
+
+        val projection = arrayOf(
+            MediaStore.Files.FileColumns.DISPLAY_NAME,
+            MediaStore.Files.FileColumns.DATA
         )
-        val cursor1 = context.contentResolver.query(
-            MediaStore.Files.getContentUri("external"),
-            projection1,
-            selection,
-            null,
-            null
-            /*MediaStore.Files.FileColumns.DATE_ADDED + " DESC "*/
-        )
-        if (cursor1 != null)
-            if (cursor1.moveToNext())
-                do {
-                    val titleC = cursor1.getString(cursor1.getColumnIndex(MediaStore.Files.FileColumns.TITLE))
-                    val idC ="" /*cursor1.getString(cursor1.getColumnIndex(MediaStore.Files.FileColumns._ID))*/
-                    val folderC ="" /*cursor1.getString(cursor1.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME))*/
-                    val sizeC ="" /*cursor1.getString(cursor1.getColumnIndex(MediaStore.Files.FileColumns.SIZE))*/
-                    val pathC = cursor1.getString(cursor1.getColumnIndex(MediaStore.Files.FileColumns.DATA))
-                    val dateAddedC =10000L /*cursor1.getLong(cursor1.getColumnIndex(MediaStore.Files.FileColumns.DATE_ADDED))*/
-                    try {
-                        val file = File(pathC)
-                        val artUriC = Uri.fromFile(file)
-                        val document1 = Document(
-                            title = titleC,
-                            id = idC,
-                            album = folderC,
-                            size = sizeC,
-                            path = pathC,
-                            artUri = artUriC,
-                            dateAdded = dateAddedC
-                        )
-                        if (file.exists()) tempList.add(document1)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
-                } while (cursor1.moveToNext())
-        cursor1?.close()
-        return tempList
+
+        val selection = "${MediaStore.Files.FileColumns.MIME_TYPE} = ?"
+        val selectionArgs = arrayOf("application/pdf")
+
+        val cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
+
+        cursor?.use {
+            val displayNameColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)
+            val dataColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA)
+
+            while (cursor.moveToNext()) {
+                val displayName = cursor.getString(displayNameColumn)
+                val data = cursor.getString(dataColumn)
+                val folderName = data.substringBeforeLast("/")
+                pdfList.add(Document(displayName,"", folderName))
+            }
+        }
+        val a = 20/0
+
+        return pdfList
+
     }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967993041316",
+    "project_id": "file-manager-app-277cd",
+    "storage_bucket": "file-manager-app-277cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967993041316:android:13217b0baedf96e9516131",
+        "android_client_info": {
+          "package_name": "com.za.filemanagerapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7DAzXziHZNwU3OPE1IUYebxveY-Np_fI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
