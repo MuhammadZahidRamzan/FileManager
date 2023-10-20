@@ -9,8 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.za.filemanagerapp.R
 import com.za.filemanagerapp.databinding.AudioViewBinding
 import com.za.filemanagerapp.features.audio.domain.model.Audio
-import com.za.filemanagerapp.features.document.domain.model.Document
-import com.za.filemanagerapp.utils.Utils.formateDuration
+import com.za.filemanagerapp.utils.Utils.formatDuration
 
 class AudioAdapter(private val context: Context, private val audioList: List<Audio>) :
     RecyclerView.Adapter<AudioAdapter.MyHolder>() {
@@ -29,7 +28,7 @@ class AudioAdapter(private val context: Context, private val audioList: List<Aud
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         holder.title.text = audioList[position].title
         holder.album.text = audioList[position].album
-        holder.duration.text = formateDuration(audioList[position].duration!!)
+        holder.duration.text = formatDuration(audioList[position].duration!!)
         Glide.with(context).load(audioList[position].artUri)
             .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
             .into(holder.image)

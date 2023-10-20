@@ -7,12 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.za.filemanagerapp.R
-import com.za.filemanagerapp.databinding.AudioViewBinding
 import com.za.filemanagerapp.databinding.DocumentViewBinding
-import com.za.filemanagerapp.features.audio.domain.model.Audio
 import com.za.filemanagerapp.features.document.domain.model.Document
-import com.za.filemanagerapp.utils.Utils.convertBytesToMegabytes
-import com.za.filemanagerapp.utils.Utils.formateDuration
+import com.za.filemanagerapp.utils.Converter
 
 class DocumentAdapter(private val context: Context, private val documentList: List<Document>) :
     RecyclerView.Adapter<DocumentAdapter.MyHolder>() {
@@ -29,12 +26,34 @@ class DocumentAdapter(private val context: Context, private val documentList: Li
     }
 
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
-        holder.title.text = documentList[position].title
-        holder.album.text = documentList[position].mimeType
-        holder.size.text = "convertBytesToMegabytes(documentList[position].size.toLong()).toString() "
-        Glide.with(context).load(R.drawable.docs)
-            .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
-            .into(holder.image)
+        holder.title.text = documentList[position].name
+        holder.album.text = documentList[position].folder
+        holder.size.text = documentList[position].size?.let { Converter.getSize(it) }
+        documentList[position].name?.let {
+            when (it.substringAfterLast(".")) {
+                "pdf" -> {
+                    Glide.with(context).load(R.drawable.pdf)
+                        .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
+                        .into(holder.image)
+                }
+                "xls" -> {
+                    Glide.with(context).load(R.drawable.xls)
+                        .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
+                        .into(holder.image)
+                }
+                "docx", "doc" -> {
+                    Glide.with(context).load(R.drawable.doc)
+                        .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
+                        .into(holder.image)
+                }
+                else -> {
+                    Glide.with(context).load(R.drawable.docs)
+                        .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
+                        .into(holder.image)
+                }
+            }
+        }
+
     }
 
     override fun getItemCount(): Int {

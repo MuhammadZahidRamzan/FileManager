@@ -1,13 +1,19 @@
 package com.za.filemanagerapp.utils.managers
 
 import android.annotation.SuppressLint
+import android.content.ContentUris
 import android.content.Context
-import android.graphics.pdf.PdfDocument
+import android.database.Cursor
 import android.net.Uri
+import android.os.Build
+import android.provider.DocumentsContract
 import android.provider.MediaStore
+import androidx.core.database.getLongOrNull
+import androidx.core.database.getStringOrNull
 import com.za.filemanagerapp.features.audio.domain.model.Audio
 import com.za.filemanagerapp.features.document.domain.model.Document
 import com.za.filemanagerapp.features.video.domain.model.Video
+import com.za.filemanagerapp.utils.enums.FileTypes
 import java.io.File
 import javax.inject.Inject
 
@@ -75,7 +81,7 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
                     val folderC = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_DISPLAY_NAME))
                     val sizeC = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.SIZE))
                     val pathC = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DATA))
-                    val durationC = cursor.getString(cursor.getColumnIndex(MediaStore.Video.Media.DURATION)).toLong()
+                    val durationC = cursor.getLong(cursor.getColumnIndex(MediaStore.Video.Media.DURATION))
                     try {
                         val file = File(pathC)
                         val artUriC = Uri.fromFile(file)
@@ -98,34 +104,92 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
     }
 
     override fun getDocumentFiles(): List<Document> {
-        val pdfList = mutableListOf<Document>()
+        val mediaItems: MutableList<Document> = mutableListOf()
 
-        val uri = MediaStore.Files.getContentUri("external")
+        val cursor = getAllMediaFilesCursor()
 
-        val projection = arrayOf(
-            MediaStore.Files.FileColumns.DISPLAY_NAME,
-            MediaStore.Files.FileColumns.DATA
-        )
+        if (true == cursor?.moveToFirst()) {
 
-        val selection = "${MediaStore.Files.FileColumns.MIME_TYPE} = ?"
-        val selectionArgs = arrayOf("application/pdf")
+            val idCol = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns._ID)
+            val pathCol = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA)
+            val nameCol = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)
+            val dateCol = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATE_MODIFIED)
+            val mimeType = cursor.getColumnIndex(MediaStore.Files.FileColumns.MIME_TYPE)
+            val sizeCol = cursor.getColumnIndex(MediaStore.Files.FileColumns.SIZE)
+            val folderCol = cursor.getColumnIndex(MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME)
 
-        val cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
+            do {
+                val id = cursor.getLong(idCol)
+                val path = cursor.getStringOrNull(pathCol) ?: continue
+                val name = cursor.getStringOrNull(nameCol) ?: continue
+                val dateTime = cursor.getLongOrNull(dateCol) ?: continue
+                val type = cursor.getStringOrNull(mimeType) ?: continue
+                val size = cursor.getLongOrNull(sizeCol) ?: continue
+                val folder = cursor.getStringOrNull(folderCol) ?: continue
+                val contentUri = ContentUris.appendId(
+                    MediaStore.Files.getContentUri("external").buildUpon(),
+                    id
+                ).build()
 
-        cursor?.use {
-            val displayNameColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DISPLAY_NAME)
-            val dataColumn = cursor.getColumnIndex(MediaStore.Files.FileColumns.DATA)
+                val document = Document(
+                    id = id,
+                    path = path,
+                    uri = contentUri.toString(),
+                    name = name,
+                    dateTime = dateTime,
+                    mimeType = type,
+                    size = size,
+                    folder = folder
+                )
 
-            while (cursor.moveToNext()) {
-                val displayName = cursor.getString(displayNameColumn)
-                val data = cursor.getString(dataColumn)
-                val folderName = data.substringBeforeLast("/")
-                pdfList.add(Document(displayName,"", folderName))
-            }
+                mediaItems.add(document)
+
+            } while (cursor.moveToNext())
         }
-        val a = 20/0
 
-        return pdfList
+        cursor?.close()
 
+        return mediaItems
+
+    }
+
+    private fun getAllMediaFilesCursor(): Cursor? {
+
+        val projections =
+            arrayOf(
+                MediaStore.Files.FileColumns._ID,
+                MediaStore.Files.FileColumns.DATA, //TODO: Use URI instead of this.. see official docs for this field
+                MediaStore.Files.FileColumns.DISPLAY_NAME,
+                MediaStore.Files.FileColumns.DATE_MODIFIED,
+                MediaStore.Files.FileColumns.MIME_TYPE,
+                MediaStore.Files.FileColumns.SIZE,
+                MediaStore.Files.FileColumns.BUCKET_DISPLAY_NAME
+            )
+
+        val sortBy = "${MediaStore.Files.FileColumns.DATE_MODIFIED} DESC"
+
+        val selectionArgs =
+            FileTypes.values().map { it.mimeTypes }.flatten().filterNotNull().toTypedArray()
+
+        val args = selectionArgs.joinToString {
+            "?"
+        }
+
+        val selection =
+            MediaStore.Files.FileColumns.MIME_TYPE + " IN (" + args + ")"
+
+        val collection = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL)
+        } else {
+            MediaStore.Files.getContentUri("external")
+        }
+
+        return context.contentResolver.query(
+            collection,
+            projections,
+            selection,
+            selectionArgs,
+            sortBy
+        )
     }
 }
