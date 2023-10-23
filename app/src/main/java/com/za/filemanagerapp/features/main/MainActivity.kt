@@ -1,22 +1,12 @@
 package com.za.filemanagerapp.features.main
 
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.Settings
-import android.util.Log
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.za.filemanagerapp.databinding.ActivityMainBinding
-import com.za.filemanagerapp.utils.permissions.ReadExternalStoragePermission
+import com.za.filemanagerapp.utils.permissions.PermissionManager
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,23 +15,36 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var pageAdapter: FragmentAdapter
 
+    private lateinit var permissionManager: PermissionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         init()
+        initClicks()
 
     }
-
     private fun init() {
-        ReadExternalStoragePermission(this) {
+        permissionManager = PermissionManager(this) {
             if (it) {
                 setUpViewPager()
+                binding.viewPager2.visibility = View.VISIBLE
+                binding.tabLayout.visibility = View.VISIBLE
+                binding.btnAllowPermission.visibility = View.GONE
             } else {
-                Toast.makeText(this, "Permission Not Granted", Toast.LENGTH_SHORT).show()
+                binding.viewPager2.visibility = View.GONE
+                binding.tabLayout.visibility = View.GONE
+                binding.btnAllowPermission.visibility = View.VISIBLE
             }
+        }
+        permissionManager.checkStoragePermissionsEnabled()
+    }
 
-        }.requestReadExternalStoragePermission()
+    private fun initClicks(){
+        binding.btnAllowPermission.setOnClickListener {
+            permissionManager.requestReadExternalStoragePermission()
+        }
     }
     private fun setUpViewPager() {
         pageAdapter = FragmentAdapter(supportFragmentManager, lifecycle)

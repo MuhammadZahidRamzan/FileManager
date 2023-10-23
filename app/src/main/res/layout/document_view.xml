@@ -26,7 +26,6 @@
         android:layout_toEndOf="@id/image"
         android:gravity="center_vertical"
         android:singleLine="true"
-        android:textColor="@color/black"
         android:layout_marginStart="70dp"
         android:layout_marginEnd="50dp"/>
 
@@ -49,7 +48,6 @@
         android:layout_alignParentEnd="true"
         android:gravity="center"
         android:layout_gravity="end"
-        android:textColor="@color/black"
         android:layout_marginHorizontal="5dp"/>
 
 </com.google.android.material.card.MaterialCardView>

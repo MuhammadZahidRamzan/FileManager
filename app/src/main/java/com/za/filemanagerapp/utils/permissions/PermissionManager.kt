@@ -14,21 +14,23 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.za.filemanagerapp.R
 
-class ReadExternalStoragePermission(
+class PermissionManager(
     private val fragment: FragmentActivity,
-    private val permissionGranted: (Boolean) -> Unit,
+    private val permissionGranted: (Boolean) -> Unit
 ) {
-    private val storagePermissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE)
-    private val requestMultiplePermissionLauncher =
+    private val storagePermissions = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+    private val requestMultiplePermissionsLauncher =
         fragment.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions->
+        ) { permissions ->
             var isGranted = false
-            for (permission in permissions){
+            for (permission in permissions) {
                 isGranted = permission.value
             }
             permissionGranted.invoke(isGranted)
-            if (!isGranted){
+            if (!isGranted) {
                 showRationalPermissionDialog()
             }
         }
@@ -53,26 +55,31 @@ class ReadExternalStoragePermission(
             }
         }
 
+    fun checkStoragePermissionsEnabled() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            permissionGranted.invoke(Environment.isExternalStorageManager())
+        } else {
+            permissionGranted.invoke(checkPermissions(storagePermissions))
+        }
+    }
+
     fun requestReadExternalStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 permissionGranted.invoke(true)
             } else {
                 permissionGranted.invoke(false)
                 showAndroid11PlusPermissionDialog()
             }
-
-        }else{
-            if (checkPermissions(storagePermissions)){
+        } else {
+            if (checkPermissions(storagePermissions)) {
                 permissionGranted.invoke(true)
-            }else{
+            } else {
                 permissionGranted.invoke(false)
-                requestMultiplePermissionLauncher.launch(
+                requestMultiplePermissionsLauncher.launch(
                     storagePermissions
                 )
-
             }
-
         }
 //        if (fragment.shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -125,7 +132,7 @@ class ReadExternalStoragePermission(
             .show()
     }
 
-    private fun requestManageFilesPermission(){
+    private fun requestManageFilesPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val intent = Intent().apply {
                 action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
@@ -137,7 +144,7 @@ class ReadExternalStoragePermission(
     }
 
 
-    private fun checkPermissions(permissions: Array<String>):Boolean{
+    private fun checkPermissions(permissions: Array<String>): Boolean {
         var isGranted = false
         permissions.forEach {
             isGranted = ContextCompat.checkSelfPermission(
@@ -147,7 +154,6 @@ class ReadExternalStoragePermission(
         }
         return isGranted
     }
-
 
 
 }

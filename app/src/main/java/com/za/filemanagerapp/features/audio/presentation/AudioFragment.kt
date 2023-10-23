@@ -1,20 +1,15 @@
 package com.za.filemanagerapp.features.audio.presentation
 
-import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.za.filemanagerapp.databinding.FragmentAudioBinding
 import com.za.filemanagerapp.features.audio.adapter.AudioAdapter
 import com.za.filemanagerapp.features.audio.domain.model.Audio
-import com.za.filemanagerapp.utils.permissions.ReadExternalStoragePermission
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,6 +37,8 @@ class AudioFragment : Fragment() {
         }
     }
     private fun populateRecycler(audioList: List<Audio>) {
+        binding.pbAudio.visibility = View.GONE
+        binding.tvAllAudios.text = "All Audios : ${audioList.size}"
         binding.audioRecycler.setHasFixedSize(true)
         binding.audioRecycler.layoutManager = LinearLayoutManager(requireContext())
         audioAdapter = AudioAdapter(requireContext(), audioList)

@@ -45,8 +45,9 @@ class VideoFragment : Fragment() {
     }
 
     private fun populateRecycler(videoList: List<Video>) {
+        binding.pbVideo.visibility = View.GONE
+        binding.tvAllVideos.text = "All Videos : ${videoList.size}"
         binding.videoRecycler.setHasFixedSize(true)
-        binding.videoRecycler.setItemViewCacheSize(10)
         binding.videoRecycler.layoutManager = LinearLayoutManager(requireContext())
         videoAdapter = VideoAdapter(requireContext(),videoList )
         binding.videoRecycler.adapter = videoAdapter

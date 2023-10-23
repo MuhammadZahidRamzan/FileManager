@@ -27,9 +27,18 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
             MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATE_ADDED,
             MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID)
+        val sortOrder = MediaStore.Audio.Media.DATE_ADDED + " DESC"
+        val collection =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Audio.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL
+                )
+            } else {
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+            }
         val cursor = context.contentResolver.query(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection
-            ,null, MediaStore.Audio.Media.DATE_ADDED + " DESC", null)
+            collection,projection,selection
+            ,null, sortOrder)
         if (cursor != null){
             if (cursor.moveToNext())
                 do {
@@ -66,8 +75,16 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
             MediaStore.Video.Media.DURATION,
             MediaStore.Video.Media.BUCKET_ID
         )
+        val collection =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                MediaStore.Video.Media.getContentUri(
+                    MediaStore.VOLUME_EXTERNAL
+                )
+            } else {
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI
+            }
         val cursor = context.contentResolver.query(
-            MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+            collection,
             projection,
             null,
             null,

@@ -1,14 +1,13 @@
 package com.za.filemanagerapp.features.document.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.za.filemanagerapp.databinding.FragmentDocumentBinding
-import com.za.filemanagerapp.features.audio.adapter.AudioAdapter
 import com.za.filemanagerapp.features.document.adapter.DocumentAdapter
 import com.za.filemanagerapp.features.document.domain.model.Document
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +40,9 @@ class DocumentFragment : Fragment() {
         }
     }
     private fun populateRecycler(documentList: List<Document>) {
+        binding.pbDocument.visibility = View.GONE
+        binding.tvAllDocuments.text = "All Documents : ${documentList.size}"
         binding.documentRecycler.setHasFixedSize(true)
-        binding.documentRecycler.setItemViewCacheSize(10)
         binding.documentRecycler.layoutManager = LinearLayoutManager(requireContext())
         audioAdapter = DocumentAdapter(requireContext(), documentList)
         binding.documentRecycler.adapter = audioAdapter

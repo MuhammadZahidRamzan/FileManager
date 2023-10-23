@@ -8,5 +8,6 @@
     <string name="close">Close</string>
     <string name="allow_access">Allow Storage Access</string>
     <string name="not_now">Not Now</string>
+    <string name="allow_permissions">Allow Permissions</string>
 
 </resources>
