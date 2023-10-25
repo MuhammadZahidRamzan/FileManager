@@ -1,4 +1,4 @@
-package com.za.filemanagerapp.features.document.presentation
+package com.za.filemanagerapp.features.document.presentation.view_models
 
 import android.content.Context
 import androidx.lifecycle.LiveData

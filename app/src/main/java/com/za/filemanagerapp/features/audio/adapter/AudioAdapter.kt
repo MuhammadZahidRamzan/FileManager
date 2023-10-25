@@ -11,13 +11,17 @@ import com.za.filemanagerapp.databinding.AudioViewBinding
 import com.za.filemanagerapp.features.audio.domain.model.Audio
 import com.za.filemanagerapp.utils.Utils.formatDuration
 
-class AudioAdapter(private val context: Context, private val audioList: List<Audio>) :
-    RecyclerView.Adapter<AudioAdapter.MyHolder>() {
+class AudioAdapter(private val context: Context,
+                   private val audioList: List<Audio>,
+                   private val onItemClicked: (Audio) -> Unit)
+    :RecyclerView.Adapter<AudioAdapter.MyHolder>() {
+
     class MyHolder(binding: AudioViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.audioName
         val album = binding.songAlbum
         val image = binding.image
         val duration = binding.audioDuration
+        val root = binding.getRoot()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -32,6 +36,9 @@ class AudioAdapter(private val context: Context, private val audioList: List<Aud
         Glide.with(context).load(audioList[position].artUri)
             .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
             .into(holder.image)
+        holder.root.setOnClickListener {
+            onItemClicked(audioList[position])
+        }
     }
 
     override fun getItemCount(): Int {

@@ -1,20 +1,20 @@
-package com.za.filemanagerapp.features.video.presentation
+package com.za.filemanagerapp.features.video.presentation.fragments
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.za.filemanagerapp.R
-import com.za.filemanagerapp.databinding.FragmentAudioBinding
 import com.za.filemanagerapp.databinding.FragmentVideoBinding
-import com.za.filemanagerapp.features.audio.adapter.AudioAdapter
-import com.za.filemanagerapp.features.audio.domain.model.Audio
-import com.za.filemanagerapp.features.audio.presentation.AudioViewModel
 import com.za.filemanagerapp.features.video.adapter.VideoAdapter
 import com.za.filemanagerapp.features.video.domain.model.Video
+import com.za.filemanagerapp.features.video.presentation.activities.VideoPlayerActivity
+import com.za.filemanagerapp.features.video.presentation.view_model.VideoViewModel
+import com.za.filemanagerapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,12 +46,22 @@ class VideoFragment : Fragment() {
 
     private fun populateRecycler(videoList: List<Video>) {
         binding.pbVideo.visibility = View.GONE
-        binding.tvAllVideos.text = "All Videos : ${videoList.size}"
+        binding.tvAllVideos.visibility = View.VISIBLE
+        binding.tvAllVideos.text = resources.getString(R.string.all_videos_string,videoList.size)
         binding.videoRecycler.setHasFixedSize(true)
         binding.videoRecycler.layoutManager = LinearLayoutManager(requireContext())
-        videoAdapter = VideoAdapter(requireContext(),videoList )
+        videoAdapter = VideoAdapter(requireContext(),videoList){
+            goToVideoPlayerActivity(it)
+        }
         binding.videoRecycler.adapter = videoAdapter
     }
+
+    private fun goToVideoPlayerActivity(video: Video){
+        val intent = Intent(requireContext(), VideoPlayerActivity::class.java)
+        intent.putExtra(Constants.VIDEO,video)
+        startActivity(intent)
+    }
+
 
 
 

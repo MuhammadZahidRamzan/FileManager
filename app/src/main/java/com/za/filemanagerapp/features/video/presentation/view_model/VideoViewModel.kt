@@ -1,4 +1,4 @@
-package com.za.filemanagerapp.features.video.presentation
+package com.za.filemanagerapp.features.video.presentation.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

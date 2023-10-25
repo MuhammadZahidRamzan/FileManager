@@ -5,6 +5,7 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id ("kotlin-parcelize")
 }
 
 android {
@@ -60,13 +61,25 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
-//    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
-//    kapt ("androidx.hilt:hilt-compiler:1.0.0")
-
-
     // TODO:Coroutines
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+
+    // TODO:exo player
+
+    implementation("androidx.media3:media3-exoplayer:1.1.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.1.1")
+    implementation("androidx.media3:media3-ui:1.1.1")
+
+    // TODO:pdf viewer
+    implementation ("com.github.barteksc:android-pdf-viewer:2.8.2")
+
+    // TODO:exel viewer
+//    implementation ("org.apache.poi:poi:4.1.2")
+//    implementation ("org.apache.poi:poi-ooxml:4.1.2")
+
+    //TODO:word files
+   // implementation ("org.text2docx:androiddocxtoword:2.2.1")
 
 }
 kapt {

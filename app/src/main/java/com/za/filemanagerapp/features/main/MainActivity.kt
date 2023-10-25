@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.za.filemanagerapp.databinding.ActivityMainBinding
+import com.za.filemanagerapp.utils.Extensions.gone
+import com.za.filemanagerapp.utils.Extensions.visible
 import com.za.filemanagerapp.utils.permissions.PermissionManager
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,13 +31,13 @@ class MainActivity : AppCompatActivity() {
         permissionManager = PermissionManager(this) {
             if (it) {
                 setUpViewPager()
-                binding.viewPager2.visibility = View.VISIBLE
-                binding.tabLayout.visibility = View.VISIBLE
-                binding.btnAllowPermission.visibility = View.GONE
+                binding.viewPager2.visible()
+                binding.tabLayout.visible()
+                binding.btnAllowPermission.gone()
             } else {
-                binding.viewPager2.visibility = View.GONE
-                binding.tabLayout.visibility = View.GONE
-                binding.btnAllowPermission.visibility = View.VISIBLE
+                binding.viewPager2.gone()
+                binding.tabLayout.gone()
+                binding.btnAllowPermission.visible()
             }
         }
         permissionManager.checkStoragePermissionsEnabled()

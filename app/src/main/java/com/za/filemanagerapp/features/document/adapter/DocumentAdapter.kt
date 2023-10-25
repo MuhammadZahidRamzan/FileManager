@@ -1,6 +1,7 @@
 package com.za.filemanagerapp.features.document.adapter
 
 import android.content.Context
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -11,13 +12,16 @@ import com.za.filemanagerapp.databinding.DocumentViewBinding
 import com.za.filemanagerapp.features.document.domain.model.Document
 import com.za.filemanagerapp.utils.Converter
 
-class DocumentAdapter(private val context: Context, private val documentList: List<Document>) :
+class DocumentAdapter(private val context: Context,
+                      private val documentList: List<Document>,
+    private val onClick:(Document)->Unit) :
     RecyclerView.Adapter<DocumentAdapter.MyHolder>() {
     class MyHolder(binding: DocumentViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.documentName
         val album = binding.documentAlbum
         val image = binding.image
         val size = binding.documentSize
+        val root = binding.root
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -52,6 +56,9 @@ class DocumentAdapter(private val context: Context, private val documentList: Li
                         .into(holder.image)
                 }
             }
+        }
+        holder.root.setOnClickListener {
+            onClick.invoke(documentList[position])
         }
 
     }

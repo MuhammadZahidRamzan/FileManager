@@ -9,5 +9,11 @@
     <string name="allow_access">Allow Storage Access</string>
     <string name="not_now">Not Now</string>
     <string name="allow_permissions">Allow Permissions</string>
+    <string name="all_videos_string">"All Videos : %d"</string>
+    <string name="all_documents_string">"All Documents : %d"</string>
+    <string name="all_audios_string">"All Audios : %d"</string>
+    <string name="song_name">Song Name</string>
+    <string name="_00_00">00:00</string>
+
 
 </resources>

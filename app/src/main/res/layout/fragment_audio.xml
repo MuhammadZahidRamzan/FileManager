@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context=".features.audio.presentation.AudioFragment">
+    tools:context=".features.audio.presentation.fragment.AudioFragment">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Total Audios"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

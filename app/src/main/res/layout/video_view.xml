@@ -4,6 +4,7 @@
     android:layout_height="60dp"
     android:layout_margin="5dp"
     app:cardCornerRadius="15dp"
+    android:id="@+id/root"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="70dp"

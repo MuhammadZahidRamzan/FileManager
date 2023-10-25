@@ -1,7 +1,9 @@
 package com.za.filemanagerapp.features.audio.domain.model
 
-import java.util.concurrent.TimeUnit
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Audio(
     private val id: String?,
     val title: String?,
@@ -10,5 +12,5 @@ data class Audio(
     val duration: Long? = 0,
     val path: String?,
     val artUri: String?
-)
+):Parcelable
 

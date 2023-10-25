@@ -9,15 +9,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.za.filemanagerapp.R
 import com.za.filemanagerapp.databinding.VideoViewBinding
+import com.za.filemanagerapp.features.audio.domain.model.Audio
 import com.za.filemanagerapp.features.video.domain.model.Video
 
-class VideoAdapter(private val context: Context,private val videoList:List<Video>):
+class VideoAdapter(private val context: Context,
+                   private val videoList:List<Video>,
+                   private val onItemClicked: (Video) -> Unit):
 RecyclerView.Adapter<VideoAdapter.MyHolder>(){
     class MyHolder(binding: VideoViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val title = binding.videoName
         val folderName = binding.videoFolderName
         val image = binding.videoImage
         val duration = binding.vidoeDuration
+        val root = binding.getRoot()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
@@ -37,5 +41,8 @@ RecyclerView.Adapter<VideoAdapter.MyHolder>(){
             .load(videoList[position].artUri)
             .apply(RequestOptions().placeholder(R.mipmap.ic_launcher).centerCrop())
             .into(holder.image)
+        holder.root.setOnClickListener {
+            onItemClicked(videoList[position])
+        }
     }
 }
