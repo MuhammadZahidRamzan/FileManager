@@ -24,9 +24,16 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
         val tempList = ArrayList<Audio>()
         val selection = MediaStore.Audio.Media.IS_MUSIC +  " != 0"
         val projection = arrayOf(
-            MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.DATE_ADDED,
-            MediaStore.Audio.Media.DATA, MediaStore.Audio.Media.ALBUM_ID)
+            MediaStore.Audio.Media._ID,
+            MediaStore.Audio.Media.TITLE,
+            MediaStore.Audio.Media.ALBUM,
+            MediaStore.Audio.Media.ARTIST,
+            MediaStore.Audio.Media.SIZE,
+            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.DATE_ADDED,
+            MediaStore.Audio.Media.DATA,
+            MediaStore.Audio.Media.ALBUM_ID
+        )
         val sortOrder = MediaStore.Audio.Media.DATE_ADDED + " DESC"
         val collection =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -47,11 +54,21 @@ class FileManagerImpl @Inject constructor(private val context: Context):FileMana
                     val albumC = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM))
                     val artistC = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
                     val pathC = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
+                    val sizeC = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE))
                     val durationC = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION))
                     val albumIdC = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)).toString()
                     val uri = Uri.parse("content://media/external/audio/albumart")
                     val artUriC = Uri.withAppendedPath(uri,albumIdC).toString()
-                    val music = Audio(id = idC, title = titleC, album = albumC, artist = artistC, path = pathC, duration = durationC, artUri = artUriC)
+                    val music = Audio(
+                        id = idC,
+                        title = titleC,
+                        album = albumC,
+                        artist = artistC,
+                        path = pathC,
+                        duration = durationC,
+                        artUri = artUriC,
+                        size = sizeC
+                    )
                     val file = music.path?.let { File(it) }
                     if (file?.exists() == true){
                         tempList.add(music)

@@ -14,11 +14,15 @@ import com.za.filemanagerapp.features.audio.adapter.AudioAdapter
 import com.za.filemanagerapp.features.audio.domain.model.Audio
 import com.za.filemanagerapp.features.audio.presentation.activity.AudioPlayerActivity
 import com.za.filemanagerapp.features.audio.presentation.view_model.AudioViewModel
+import com.za.filemanagerapp.features.audio.service.AudioService
 import com.za.filemanagerapp.utils.Constants
+import com.za.filemanagerapp.utils.managers.AudioManager
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AudioFragment : Fragment() {
+    @Inject lateinit var audioManager : AudioManager
     private val viewModel: AudioViewModel by viewModels()
     private lateinit var binding: FragmentAudioBinding
     private lateinit var audioAdapter: AudioAdapter
@@ -34,11 +38,14 @@ class AudioFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModelObserver()
+
     }
+
 
     private fun viewModelObserver() {
         viewModel.audiosList.observe(viewLifecycleOwner) {
             populateRecycler(it)
+            audioManager.setAudios(it)
         }
     }
     private fun populateRecycler(audioList: List<Audio>) {
@@ -53,7 +60,7 @@ class AudioFragment : Fragment() {
         binding.audioRecycler.adapter = audioAdapter
     }
 
-    private fun goToAudioPlayerActivity(audio: Audio){
+    private fun goToAudioPlayerActivity(audio:Audio){
         val intent = Intent(requireContext(),AudioPlayerActivity::class.java)
         intent.putExtra(Constants.AUDIO,audio)
         startActivity(intent)

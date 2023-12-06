@@ -1,12 +1,15 @@
 package com.za.filemanagerapp.di
 
 import android.content.Context
+import android.media.AudioManager
 import com.za.filemanagerapp.features.audio.data.repository.AudioRepositoryImpl
 import com.za.filemanagerapp.features.audio.domain.repository.AudioRepository
+import com.za.filemanagerapp.features.audio.presentation.activity.AudioPlayerActivity
 import com.za.filemanagerapp.features.document.data.repository.DocumentRepositoryImpl
 import com.za.filemanagerapp.features.document.domain.repository.DocumentRepository
 import com.za.filemanagerapp.features.video.data.repository.VideoRepositoryImpl
 import com.za.filemanagerapp.features.video.domain.repository.VideoRepository
+import com.za.filemanagerapp.utils.managers.AudioManagerImpl
 import com.za.filemanagerapp.utils.managers.FileManager
 import com.za.filemanagerapp.utils.managers.FileManagerImpl
 import dagger.Module
@@ -31,6 +34,12 @@ object AppModule {
     @Singleton
     fun provideFileManager(@ApplicationContext context: Context): FileManager {
         return FileManagerImpl(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAudioManager(@ApplicationContext context: Context): com.za.filemanagerapp.utils.managers.AudioManager {
+        return AudioManagerImpl(context)
     }
 
     @Provides

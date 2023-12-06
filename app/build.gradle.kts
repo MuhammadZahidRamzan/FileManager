@@ -74,13 +74,6 @@ dependencies {
     // TODO:pdf viewer
     implementation ("com.github.barteksc:android-pdf-viewer:2.8.2")
 
-    // TODO:exel viewer
-//    implementation ("org.apache.poi:poi:4.1.2")
-//    implementation ("org.apache.poi:poi-ooxml:4.1.2")
-
-    //TODO:word files
-   // implementation ("org.text2docx:androiddocxtoword:2.2.1")
-
 }
 kapt {
     correctErrorTypes = true

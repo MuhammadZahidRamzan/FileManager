@@ -21,6 +21,7 @@ class PermissionManager(
     private val storagePermissions = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
+
     private val requestMultiplePermissionsLauncher =
         fragment.registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
@@ -34,7 +35,6 @@ class PermissionManager(
                 showRationalPermissionDialog()
             }
         }
-
 
     private val settingsResultLauncher =
         fragment.registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -113,6 +113,7 @@ class PermissionManager(
             .setNegativeButton(fragment.getString(R.string.close)) { dialog, _ ->
                 dialog.dismiss()
             }
+            .setCancelable(false)
             .create()
             .show()
     }

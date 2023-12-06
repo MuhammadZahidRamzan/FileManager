@@ -13,8 +13,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.za.filemanagerapp.R
 import com.za.filemanagerapp.databinding.FragmentDocumentBinding
-import com.za.filemanagerapp.features.audio.domain.model.Audio
-import com.za.filemanagerapp.features.audio.presentation.activity.AudioPlayerActivity
 import com.za.filemanagerapp.features.document.adapter.DocumentAdapter
 import com.za.filemanagerapp.features.document.domain.model.Document
 import com.za.filemanagerapp.features.document.presentation.activities.DocumentViewerActivity
@@ -59,27 +57,28 @@ class DocumentFragment : Fragment() {
         binding.documentRecycler.layoutManager = LinearLayoutManager(requireContext())
         audioAdapter = DocumentAdapter(requireContext(), documentList) {
             if (it.name?.substringAfterLast(".")=="pdf"){
-                goToDocumentViewerActivity(it.uri.toString())
+                goToDocumentViewerActivity(it)
             }else{
+            //    goToDocumentViewerActivity(it)
                 openFile(Uri.parse(it.uri))
             }
         }
         binding.documentRecycler.adapter = audioAdapter
     }
 
-    private fun goToDocumentViewerActivity(uri: String){
+    private fun goToDocumentViewerActivity(document:Document){
         val intent = Intent(requireContext(), DocumentViewerActivity::class.java)
-        intent.putExtra(Constants.DOCUMENT,uri)
+        intent.putExtra(Constants.DOCUMENT,document)
         startActivity(intent)
     }
 
-    private fun openFile(url: Uri) {
+    private fun openFile(uri: Uri) {
         try {
             // Replace 'your_file_uri' with the URI of the file you want to open
             // Create an intent with ACTION_VIEW to open the file
             val intent = Intent(Intent.ACTION_VIEW)
             // Set the data (URI) of the file to open
-            intent.data = url
+            intent.data = uri
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(

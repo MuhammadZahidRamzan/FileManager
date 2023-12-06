@@ -11,9 +11,5 @@ object Utils {
                 minutes* TimeUnit.SECONDS.convert(1, TimeUnit.MINUTES))
         return String.format("%02d:%02d", minutes, seconds)
     }
-    fun convertLongToTime(time: Long): String {
-        val date = Date(time)
-        val format = SimpleDateFormat("dd.MM.yyyy HH:mm")
-        return format.format(date)
-    }
+
 }

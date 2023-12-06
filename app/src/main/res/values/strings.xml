@@ -14,6 +14,11 @@
     <string name="all_audios_string">"All Audios : %d"</string>
     <string name="song_name">Song Name</string>
     <string name="_00_00">00:00</string>
+    <string name="share">Share</string>
+    <string name="details">Details</string>
+    <string name="ok">ok</string>
+    <string name="audio_name">Audio Name</string>
+    <string name="singer_name">Singer Name</string>
 
 
 </resources>

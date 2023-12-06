@@ -5,12 +5,12 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Audio(
-    private val id: String?,
+    val id: String?,
     val title: String?,
     val album: String?,
-    private val artist: String?,
+    val artist: String?,
     val duration: Long? = 0,
+    val size: String?,
     val path: String?,
     val artUri: String?
 ):Parcelable
-

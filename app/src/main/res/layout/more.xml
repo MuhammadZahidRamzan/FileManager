@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:padding="8dp"
+    android:layout_height="wrap_content"
+    >
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:icon="@drawable/icon_share"
+            android:text="@string/share"
+            app:iconGravity="top"
+            android:id="@+id/btn_share"
+            android:textAllCaps="false"
+            android:layout_weight="1"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            app:icon="@drawable/icon_info"
+            android:text="@string/details"
+            android:id="@+id/btn_details"
+            app:iconGravity="top"
+            android:textAllCaps="false"
+            android:layout_weight="1"
+            />
+
+
+</LinearLayout>
