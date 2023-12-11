@@ -15,9 +15,3 @@ interface AudioManager {
     fun isAudioPlaying():Boolean
     fun seekTo(progress: Int)
 }
-enum class AudioState {
-    READY,
-    PLAYING ,
-    PAUSED,
-    COMPLETED
-}

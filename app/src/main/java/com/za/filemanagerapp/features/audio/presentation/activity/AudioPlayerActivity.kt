@@ -11,9 +11,9 @@ import com.za.filemanagerapp.features.audio.domain.model.Audio
 import com.za.filemanagerapp.utils.Constants
 import com.za.filemanagerapp.utils.Extensions.parcelable
 import com.za.filemanagerapp.utils.Utils.formatDuration
+import com.za.filemanagerapp.utils.enums.AudioState
 import com.za.filemanagerapp.utils.managers.AudioManager
 import com.za.filemanagerapp.utils.managers.AudioManagerCallbacks
-import com.za.filemanagerapp.utils.managers.AudioState
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -62,7 +62,6 @@ class AudioPlayerActivity :
                     }
 
                     AudioState.COMPLETED -> {
-
                     }
                 }
             }

@@ -1,10 +1,8 @@
 package com.za.filemanagerapp.di
 
 import android.content.Context
-import android.media.AudioManager
 import com.za.filemanagerapp.features.audio.data.repository.AudioRepositoryImpl
 import com.za.filemanagerapp.features.audio.domain.repository.AudioRepository
-import com.za.filemanagerapp.features.audio.presentation.activity.AudioPlayerActivity
 import com.za.filemanagerapp.features.document.data.repository.DocumentRepositoryImpl
 import com.za.filemanagerapp.features.document.domain.repository.DocumentRepository
 import com.za.filemanagerapp.features.video.data.repository.VideoRepositoryImpl
@@ -39,7 +37,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideAudioManager(@ApplicationContext context: Context): com.za.filemanagerapp.utils.managers.AudioManager {
-        return AudioManagerImpl(context)
+        return AudioManagerImpl()
     }
 
     @Provides

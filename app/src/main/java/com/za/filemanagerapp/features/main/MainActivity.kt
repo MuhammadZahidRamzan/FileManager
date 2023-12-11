@@ -1,7 +1,6 @@
 package com.za.filemanagerapp.features.main
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 binding.btnAllowPermission.visible()
             }
         }
-        permissionManager.checkStoragePermissionsEnabled()
+        permissionManager.requestReadExternalStoragePermission()
     }
 
     private fun initClicks(){

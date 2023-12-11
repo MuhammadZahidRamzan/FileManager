@@ -1,15 +1,14 @@
 package com.za.filemanagerapp.utils.managers
 
-import android.content.Context
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import com.za.filemanagerapp.features.audio.domain.model.Audio
-import com.za.filemanagerapp.features.audio.utils.Utils.setSongPosition
+import com.za.filemanagerapp.utils.enums.AudioState
 import java.io.IOException
 import javax.inject.Inject
 
-class AudioManagerImpl @Inject constructor(private val context: Context) : AudioManager {
+class AudioManagerImpl @Inject constructor() : AudioManager {
     private var audioPlayer: MediaPlayer? = null
     private var audiosList: List<Audio>? = null
     private var currentAudio: Audio? = null
@@ -74,7 +73,7 @@ class AudioManagerImpl @Inject constructor(private val context: Context) : Audio
                 callbacks?.onStateChange(AudioState.COMPLETED)
                 audioPlayer?.seekTo(0)
                 callbacks?.onProgressChange(0)
-                pauseAudio()
+                playNextAudio()
             }
         } catch (e: IOException) {
             e.printStackTrace()
